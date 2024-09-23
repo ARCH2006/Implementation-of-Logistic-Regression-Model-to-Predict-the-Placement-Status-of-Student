@@ -10,13 +10,15 @@ To write a program to implement the the Logistic Regression Model to Predict the
 ```
 ## Algorithm
 ```
-1.Import the standard libraries.
-2.Upload the dataset and check for any null or duplicated values using .isnull() and .duplicated() function respectively.
-3.Import LabelEncoder and encode the dataset.
-4.Import LogisticRegression from sklearn and apply the model on the dataset.
-5.Predict the values of array.
-6.Calculate the accuracy, confusion and classification report by importing the required modules from sklearn.
-7.Apply new unknown values
+step1:start the program
+step2:Import the standard libraries.
+step3:Upload the dataset and check for any null or duplicated values using .isnull() and .duplicated() function respectively.
+step4:Import LabelEncoder and encode the dataset.
+step5:Import LogisticRegression from sklearn and apply the model on the dataset.
+step6:Predict the values of array.
+step7:Calculate the accuracy, confusion and classification report by importing the required modules from sklearn.
+step8:Apply new unknown values
+step9:End
 ```
 
 ## Program:
@@ -63,7 +65,6 @@ print("Mean Squared Error:",mse)
 #optionally print some predictions
 print("\npredictions:\n",y_pred[:5])
 ```
-
 ## Output:
 ```
 Mean Squared Error: 2.5617706196019805
