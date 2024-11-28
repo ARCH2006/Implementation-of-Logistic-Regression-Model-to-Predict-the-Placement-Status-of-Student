@@ -28,52 +28,54 @@ Program to implement the the Logistic Regression Model to Predict the Placement 
 Developed by: ARCHANA S
 RegisterNumber:  212223040019
 */
-import numpy as np
-from sklearn.datasets import fetch_california_housing
-from sklearn.linear_model import SGDRegressor
-from sklearn.multioutput import MultiOutputRegressor
+import pandas as pd
+data=pd.read_csv("Placement_Data.csv")
+data.head()
+data1=data.copy()
+data1.head()
+data1=data1.drop(['sl_no','salary'],axis=1)
+data1.isnull().sum()
+data1.duplicated().sum()
+data1
+from sklearn.preprocessing import LabelEncoder
+le=LabelEncoder()
+data1["gender"]=le.fit_transform(data1["gender"])
+data1["ssc_b"]=le.fit_transform(data1["ssc_b"])
+data1["hsc_b"]=le.fit_transform(data1["hsc_b"])
+data1["hsc_s"]=le.fit_transform(data1["hsc_s"])
+data1["degree_t"]=le.fit_transform(data1["degree_t"])
+data1["workex"]=le.fit_transform(data1["workex"])
+data1["specialisation"]=le.fit_transform(data1["specialisation"])
+data1["status"]=le.fit_transform(data1["status"])
+data1
+x=data1.iloc[:, : -1]
+x
+y=data1["status"]
+y
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error
-from sklearn.preprocessing import StandardScaler
-#load the california housing dataset
-data = fetch_california_housing()
-#use the first 3 features as inputs
-X= data.data[:, :3] #features: 'Medinc','housage','averooms'
-Y=np.column_stack((data.target,data.data[:, 6]))
-x_train,x_test,y_train,y_test = train_test_split(X,Y,test_size=0.2,random_state=42)
-#scale the features and target variables
-scaler_x = StandardScaler()
-scaler_y = StandardScaler()
-x_train = scaler_x.fit_transform(x_train)
-x_test = scaler_x.transform(x_test)
-y_train = scaler_y.fit_transform(y_train)
-y_test = scaler_y.transform(y_test)
-#initialize the SGDRegressor
-sgd = SGDRegressor(max_iter = 1000,tol = 1e-3)
-#Use Multioutputregressor to handle multiple output varibles
-multi_output_sgd = MultiOutputRegressor(sgd)
-#train the model
-multi_output_sgd.fit(x_train,y_train)
-#predict on the test data
-y_pred = multi_output_sgd.predict(x_test)
-#inverse transform the prediction to get them back to the original scale
-y_pred = scaler_y.inverse_transform(y_pred)
-y_test = scaler_y.inverse_transform(y_test)
-#evaluate the model using mean squared error
-mse = mean_squared_error(y_test,y_pred)
-print("Mean Squared Error:",mse)
-#optionally print some predictions
-print("\npredictions:\n",y_pred[:5])
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.2,random_state=0)
+from sklearn.linear_model import LogisticRegression
+model=LogisticRegression(solver="liblinear")
+model.fit(x_train,y_train)
+y_pred=model.predict(x_test)
+from sklearn.metrics import accuracy_score,confusion_matrix,classification_report
+accuracy=accuracy_score(y_test,y_pred)
+confusion=confusion_matrix(y_test,y_pred)
+cr=classification_report(y_test,y_pred)
+print("Accuracy score:",accuracy)
+print("\nConfusion matrix:\n",confusion)
+print("\nClassification Report:\n",cr)
+from sklearn import metrics
+cm_display=metrics.ConfusionMatrixDisplay(confusion_matrix=confusion,display_labels=[True,False])
+cm_display.plot()
+
 ```
 ## Output:
-```
-Mean Squared Error: 2.5617706196019805
-predictions: [[ 1.05253483 35.78240513]
-             [ 1.49326644 35.79998002]
-             [ 2.32258926 35.5349678 ]
-             [ 2.71613475 35.49546887]
-             [ 2.08993585 35.70601914]]
-```
+
+![364618252-8e272b59-b8f6-4dd0-98ab-92e31af0b7bd](https://github.com/user-attachments/assets/7629b0b3-3b5a-4288-b2b1-ee59baab36ec)
+
+
+![364618315-98c954f8-4c2a-43d1-a34f-3acd202edae1](https://github.com/user-attachments/assets/a74e1ff2-9a1e-4455-875f-00404cb99ca4)
 
 
 ## Result:
